@@ -40,7 +40,7 @@ on init
     symlink /storage/sdcard0 /mnt/sdcard
 
 on boot
-    # For find7s notification LED
+    # For n3 notification LED
     chown system system /sys/class/leds/led:rgb_red/brightness
     chown system system /sys/class/leds/led:rgb_red/ramp_step_ms
     chown system system /sys/class/leds/led:rgb_red/duty_pcts
