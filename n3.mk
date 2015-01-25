@@ -49,11 +49,9 @@ PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 
 # NFC packages
 PRODUCT_PACKAGES += \
-    nfc.msm8974 \
-    libnfc \
-    libnfc_jni \
-    Nfc \
+    NfcNci \
     Tag \
+    nfc_nci.pn54x.default \
     com.android.nfc_extras
 
 # Permissions
