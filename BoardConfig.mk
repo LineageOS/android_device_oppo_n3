@@ -51,5 +51,7 @@ TARGET_RECOVERY_FSTAB := device/oppo/n3/rootdir/etc/fstab.qcom
 
 AUDIO_FEATURE_LOW_LATENCY_PRIMARY := true
 
+TARGET_INIT_VENDOR_LIB := libinit_n3
+
 # Inherit from the proprietary version
 -include vendor/oppo/n3/BoardConfigVendor.mk
