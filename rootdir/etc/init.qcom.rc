@@ -62,6 +62,9 @@ on post-fs-data
     chown system camera /sys/devices/qcom,camera-led-flash.81/test
     chmod 0660 /sys/devices/qcom,camera-led-flash.81/test
 
+on property:persist.radio.multisim.config=dsds
+    start ril-daemon2
+
 service sdcard /system/bin/sdcard -u 1023 -g 1023 -l /data/media /mnt/shell/emulated
     class late_start
 
@@ -73,3 +76,10 @@ service fuse_usbdisk /system/bin/sdcard -u 1023 -g 1023 /mnt/media_rw/usbdisk /s
     class late_start
     disabled
 
+service ril-daemon2 /system/bin/rild -c 2
+    class main
+    socket rild2 stream 660 root radio
+    socket rild-debug2 stream 660 radio system
+    user root
+    disabled
+    group radio cache inet misc audio sdcard_r sdcard_rw diag qcom_diag log
