@@ -54,6 +54,10 @@ PRODUCT_PACKAGES += \
     nfc_nci.pn54x.default \
     com.android.nfc_extras
 
+# NFC config
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/libnfc-bcrm.conf:system/etc/libnfc-brcm.conf
+
 # Permissions
 PRODUCT_COPY_FILES += \
     frameworks/base/nfc-extras/com.android.nfc_extras.xml:system/etc/permissions/com.android.nfc_extras.xml \
