@@ -14,6 +14,10 @@ ro.qti.sensors.vmd=true
 
 # Audio
 persist.speaker.prot.enable=true
+ro.qc.sdk.audio.fluencetype=fluence
+persist.audio.fluence.voicecall=true
+persist.audio.fluence.voicerec=false
+persist.audio.fluence.speaker=true
 
 # GPS
 persist.gps.qc_nlp_in_use=0
