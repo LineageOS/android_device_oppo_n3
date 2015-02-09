@@ -56,6 +56,19 @@ on boot
     chown system system /sys/class/leds/led:rgb_blue/ramp_step_ms
     chown system system /sys/class/leds/led:rgb_blue/duty_pcts
     chown system system /sys/class/leds/led:rgb_blue/blink
+    # camera motor
+    chown system camera /sys/class/motor/cameramotor/mdangel
+    chown system camera /sys/class/motor/cameramotor/mddir
+    chown system camera /sys/class/motor/cameramotor/mdmode
+    chown system camera /sys/class/motor/cameramotor/mdspeed
+    chown system camera /sys/class/motor/cameramotor/pwm_enable
+    chown system camera /proc/cam_block
+    chmod 0660 /sys/class/motor/cameramotor/mdangel
+    chmod 0660 /sys/class/motor/cameramotor/mddir
+    chmod 0660 /sys/class/motor/cameramotor/mdmode
+    chmod 0660 /sys/class/motor/cameramotor/mdspeed
+    chmod 0660 /sys/class/motor/cameramotor/pwm_enable
+    chmod 0660 /proc/cam_block
 
 on post-fs-data
     # Torch
