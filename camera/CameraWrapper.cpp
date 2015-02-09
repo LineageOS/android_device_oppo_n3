@@ -32,11 +32,21 @@
 #include <hardware/camera.h>
 #include <camera/Camera.h>
 #include <camera/CameraParameters.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 static android::Mutex gCameraWrapperLock;
 static camera_module_t *gVendorModule = 0;
 
-static char **fixed_set_params = NULL;
+static const char * MOTOR_ANGLE_FILE = "/sys/class/motor/cameramotor/mdangel";
+static const char * MOTOR_DIRECTION_FILE = "/sys/class/motor/cameramotor/mddir";
+static const char * MOTOR_SPEED_FILE = "/sys/class/motor/cameramotor/mdspeed";
+static const char * MOTOR_MODE_FILE = "/sys/class/motor/cameramotor/mdmode";
+static const char * MOTOR_ENABLE_FILE = "/sys/class/motor/cameramotor/pwm_enable";
+static const char * MOTOR_BLOCK_DETECT_FILE = "/proc/cam_block";
+
+static char *fixed_set_params = NULL;
 
 static int camera_device_open(const hw_module_t *module, const char *name,
         hw_device_t **device);
@@ -73,6 +83,9 @@ typedef struct wrapper_camera_device {
     camera_device_t *vendor;
 } wrapper_camera_device_t;
 
+static camera_device_t *gVendorDeviceHandle = NULL;
+static unsigned int gUseFlags = 0;
+
 #define VENDOR_CALL(device, func, ...) ({ \
     wrapper_camera_device_t *__wrapper_dev = (wrapper_camera_device_t*) device; \
     __wrapper_dev->vendor->ops->func(__wrapper_dev->vendor, ##__VA_ARGS__); \
@@ -93,6 +106,33 @@ static int check_vendor_module()
     if (rv)
         ALOGE("failed to open vendor camera module");
     return rv;
+}
+
+static void write_int(const char *file, int value)
+{
+    int fd = open(file, O_WRONLY);
+    if (fd >= 0) {
+        char buf[10];
+        snprintf(buf, sizeof(buf), "%d", value);
+        if (write(fd, buf, strlen(buf)) < 0) {
+            ALOGE("Write to %s failed: %d", file, errno);
+        }
+        close(fd);
+    } else {
+        ALOGE("Open %s failed: %d", file, errno);
+    }
+}
+
+static void rotate_camera(bool to_ffc)
+{
+    ALOGD("Rotate cam to %s", to_ffc ? "FFC" : "BFC");
+    write_int(MOTOR_ENABLE_FILE, 0);
+    write_int(MOTOR_ANGLE_FILE, 215);
+    write_int(MOTOR_DIRECTION_FILE, to_ffc ? 1 : 0);
+    write_int(MOTOR_SPEED_FILE, 0);
+    write_int(MOTOR_BLOCK_DETECT_FILE, 0);
+    write_int(MOTOR_MODE_FILE, 6);
+    write_int(MOTOR_ENABLE_FILE, 1);
 }
 
 static const char *KEY_EXPOSURE_TIME = "exposure-time";
@@ -181,12 +221,11 @@ static char *camera_fixup_setparams(int id, const char *settings)
 #endif
 
     android::String8 strParams = params.flatten();
-    if (fixed_set_params[id])
-        free(fixed_set_params[id]);
-    fixed_set_params[id] = strdup(strParams.string());
-    char *ret = fixed_set_params[id];
+    if (fixed_set_params)
+        free(fixed_set_params);
+    fixed_set_params = strdup(strParams.string());
 
-    return ret;
+    return fixed_set_params;
 }
 
 /*******************************************************************
@@ -485,14 +524,16 @@ static int camera_device_close(hw_device_t *device)
         goto done;
     }
 
-    for (int i = 0; i < camera_get_number_of_cameras(); i++) {
-        if (fixed_set_params[i])
-            free(fixed_set_params[i]);
+    wrapper_dev = (wrapper_camera_device_t*) device;
+    gUseFlags &= ~(1 << wrapper_dev->id);
+
+    if (gUseFlags == 0) {
+        gVendorDeviceHandle->common.close((hw_device_t*) gVendorDeviceHandle);
+        rotate_camera(false);
+        free(fixed_set_params);
+        gVendorDeviceHandle = NULL;
     }
 
-    wrapper_dev = (wrapper_camera_device_t*) device;
-
-    wrapper_dev->vendor->common.close((hw_device_t*)wrapper_dev->vendor);
     if (wrapper_dev->base.ops)
         free(wrapper_dev->base.ops);
     free(wrapper_dev);
@@ -533,19 +574,17 @@ static int camera_device_open(const hw_module_t *module, const char *name,
         cameraid = atoi(name);
         num_cameras = gVendorModule->get_number_of_cameras();
 
-        fixed_set_params = (char **) malloc(sizeof(char *) * num_cameras);
-        if (!fixed_set_params) {
-            ALOGE("parameter memory allocation fail");
-            rv = -ENOMEM;
-            goto fail;
-        }
-        memset(fixed_set_params, 0, sizeof(char *) * num_cameras);
-
         if (cameraid > num_cameras) {
             ALOGE("camera service provided cameraid out of bounds, "
                     "cameraid = %d, num supported = %d",
                     cameraid, num_cameras);
             rv = -EINVAL;
+            goto fail;
+        }
+
+        if (gUseFlags & (1 << cameraid)) {
+            ALOGE("Camera ID %d is already in use");
+            rv = -ENODEV;
             goto fail;
         }
 
@@ -558,13 +597,19 @@ static int camera_device_open(const hw_module_t *module, const char *name,
         memset(camera_device, 0, sizeof(*camera_device));
         camera_device->id = cameraid;
 
-        rv = gVendorModule->common.methods->open(
-                (const hw_module_t*)gVendorModule, name,
-                (hw_device_t**)&(camera_device->vendor));
-        if (rv) {
-            ALOGE("vendor camera open fail");
-            goto fail;
+        if (!gVendorDeviceHandle) {
+            rv = gVendorModule->common.methods->open(
+                    (const hw_module_t*)gVendorModule, "0",
+                    (hw_device_t**)&(gVendorDeviceHandle));
+            if (rv) {
+                ALOGE("vendor camera open fail");
+                goto fail;
+            }
         }
+
+        gUseFlags |= (1 << cameraid);
+
+        camera_device->vendor = gVendorDeviceHandle;
         ALOGV("%s: got vendor camera device 0x%08X",
                 __FUNCTION__, (uintptr_t)(camera_device->vendor));
 
@@ -574,6 +619,8 @@ static int camera_device_open(const hw_module_t *module, const char *name,
             rv = -ENOMEM;
             goto fail;
         }
+
+        rotate_camera(cameraid == 1);
 
         memset(camera_ops, 0, sizeof(*camera_ops));
 
@@ -630,7 +677,7 @@ static int camera_get_number_of_cameras(void)
     ALOGV("%s", __FUNCTION__);
     if (check_vendor_module())
         return 0;
-    return gVendorModule->get_number_of_cameras();
+    return 2; //gVendorModule->get_number_of_cameras();
 }
 
 static int camera_get_camera_info(int camera_id, struct camera_info *info)
@@ -638,5 +685,16 @@ static int camera_get_camera_info(int camera_id, struct camera_info *info)
     ALOGV("%s", __FUNCTION__);
     if (check_vendor_module())
         return 0;
-    return gVendorModule->get_camera_info(camera_id, info);
+
+    int result = gVendorModule->get_camera_info(0, info);
+    if (result == 0 && camera_id == 1) {
+        info->facing = CAMERA_FACING_FRONT;
+        if (info->orientation >= 180) {
+            info->orientation -= 180;
+        } else {
+            info->orientation += 180;
+        }
+    }
+
+    return result;
 }
