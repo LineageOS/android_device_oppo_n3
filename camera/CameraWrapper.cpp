@@ -26,7 +26,7 @@
 #define LOG_TAG "CameraWrapper"
 #include <cutils/log.h>
 
-#include <utils/threads.h>
+#include <utils/AndroidThreads.h>
 #include <utils/String8.h>
 #include <hardware/hardware.h>
 #include <hardware/camera.h>
@@ -38,6 +38,11 @@
 
 static android::Mutex gCameraWrapperLock;
 static camera_module_t *gVendorModule = 0;
+
+static android::Mutex gRotateLock;
+static android_thread_id_t gRotateThreadId = 0;
+static bool gRotateToFfc;
+static unsigned int gRotateCounter = 0;
 
 static const char * MOTOR_ANGLE_FILE = "/sys/class/motor/cameramotor/mdangel";
 static const char * MOTOR_DIRECTION_FILE = "/sys/class/motor/cameramotor/mddir";
@@ -123,16 +128,49 @@ static void write_int(const char *file, int value)
     }
 }
 
+static int rotate_camera_thread(void *)
+{
+    while (true) {
+        unsigned int counterBeforeSleep;
+        {
+            android::Mutex::Autolock lock(gRotateLock);
+            counterBeforeSleep = gRotateCounter;
+        }
+
+        usleep(200 * 1000);
+
+        android::Mutex::Autolock lock(gRotateLock);
+        if (gRotateCounter == counterBeforeSleep) {
+            ALOGD("Rotate camera to %s", gRotateToFfc ? "FFC" : "BFC");
+
+            write_int(MOTOR_ENABLE_FILE, 0);
+            write_int(MOTOR_ANGLE_FILE, 215);
+            write_int(MOTOR_DIRECTION_FILE, gRotateToFfc ? 1 : 0);
+            write_int(MOTOR_SPEED_FILE, 0);
+            write_int(MOTOR_MODE_FILE, 6);
+            write_int(MOTOR_ENABLE_FILE, 1);
+            write_int(MOTOR_BLOCK_DETECT_FILE, 0 /* same as speed */);
+
+            gRotateThreadId = 0;
+            break;
+        }
+    }
+
+    return 0;
+}
+
 static void rotate_camera(bool to_ffc)
 {
-    ALOGD("Rotate cam to %s", to_ffc ? "FFC" : "BFC");
-    write_int(MOTOR_ENABLE_FILE, 0);
-    write_int(MOTOR_ANGLE_FILE, 215);
-    write_int(MOTOR_DIRECTION_FILE, to_ffc ? 1 : 0);
-    write_int(MOTOR_SPEED_FILE, 0);
-    write_int(MOTOR_BLOCK_DETECT_FILE, 0);
-    write_int(MOTOR_MODE_FILE, 6);
-    write_int(MOTOR_ENABLE_FILE, 1);
+    android::Mutex::Autolock lock(gRotateLock);
+
+    ALOGI("Camera rotate to %s triggered", to_ffc ? "FFC" : "BFC");
+    if (gRotateThreadId == 0) {
+        androidCreateThreadEtc(rotate_camera_thread, NULL,
+                "CameraMotorDelay", android::PRIORITY_DEFAULT, 0, &gRotateThreadId);
+    }
+
+    gRotateToFfc = to_ffc;
+    gRotateCounter++;
 }
 
 static const char *KEY_EXPOSURE_TIME = "exposure-time";
