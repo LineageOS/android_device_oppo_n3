@@ -929,6 +929,22 @@
         <path name="dmic-endfire" />
     </path>
 
+    <path name="speaker-dmic-endfire">
+        <path name="handset-dmic" />
+        <ctl name="ADC3 Volume" value="19" />
+        <ctl name="ADC4 Volume" value="19" />
+        <ctl name="SLIM_0_RX Format" value="S16_LE" />
+    </path>
+
+    <path name="voice-speaker-dmic-ef">
+        <path name="speaker-dmic-endfire" />
+        <ctl name="ADC3 Volume" value="5" />
+        <ctl name="ADC4 Volume" value="15" />
+        <ctl name="DEC3 Volume" value="84" />
+        <ctl name="DEC4 Volume" value="84" />
+        <ctl name="SLIM TX7 MUX" value="DEC3" />
+        <ctl name="SLIM TX8 MUX" value="DEC4" />
+    </path>
 
     <!-- Stereo recording -->
     <path name="speaker-stereo-dmic-ef">
@@ -947,12 +963,16 @@
 
     <path name="handset-stereo-dmic-ef">
         <path name="handset-dmic" />
-        <ctl name="ADC3 Volume" value="19" />
-        <ctl name="ADC4 Volume" value="19" />
+        <ctl name="SLIM TX7 MUX" value="DEC3" />
+        <ctl name="SLIM TX8 MUX" value="DEC4" />
+        <ctl name="ADC3 Volume" value="11" />
+        <ctl name="ADC4 Volume" value="11" />
     </path>
 
     <path name="camcorder-mic">
         <path name="speaker-stereo-dmic-ef" />
+        <ctl name="SLIM TX7 MUX" value="DEC3" />
+        <ctl name="SLIM TX8 MUX" value="DEC4" />
     </path>
 
 
