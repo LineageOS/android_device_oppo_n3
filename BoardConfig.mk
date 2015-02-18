@@ -56,5 +56,14 @@ AUDIO_FEATURE_ENABLED_FLUENCE := true
 
 TARGET_INIT_VENDOR_LIB := libinit_n3
 
+# SELinux
+BOARD_SEPOLICY_DIRS += device/oppo/n3/sepolicy
+
+BOARD_SEPOLICY_UNION += \
+    file.te \
+    genfs_contexts \
+    mediaserver.te \
+    vold.te
+
 # Inherit from the proprietary version
 -include vendor/oppo/n3/BoardConfigVendor.mk

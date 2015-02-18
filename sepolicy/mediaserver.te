@@ -1,0 +1,1 @@
+allow mediaserver proc_cam_motor:file { open write };

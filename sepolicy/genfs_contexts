@@ -1,0 +1,1 @@
+genfscon proc /cam_block  u:object_r:proc_cam_motor:s0
