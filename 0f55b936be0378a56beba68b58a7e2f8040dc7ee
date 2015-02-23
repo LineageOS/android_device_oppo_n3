@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bacf61ea_d01dc5be",
+        "filename": "rootdir/etc/fstab.qcom",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2015-02-23T13:31:43Z",
+      "side": 1,
+      "message": "Does n3 have internal ext4 storage? I thought it had emulated",
+      "revId": "0f55b936be0378a56beba68b58a7e2f8040dc7ee",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
