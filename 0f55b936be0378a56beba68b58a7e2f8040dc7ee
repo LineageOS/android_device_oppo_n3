@@ -16,6 +16,24 @@
       "revId": "0f55b936be0378a56beba68b58a7e2f8040dc7ee",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bacf61ea_107e3de4",
+        "filename": "rootdir/etc/fstab.qcom",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 3671
+      },
+      "writtenOn": "2015-02-23T13:38:40Z",
+      "side": 1,
+      "message": "yep, it is\n\nthis appears to be residual from the find7-common base i used",
+      "parentUuid": "bacf61ea_d01dc5be",
+      "revId": "0f55b936be0378a56beba68b58a7e2f8040dc7ee",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
