@@ -253,6 +253,8 @@ static char *camera_fixup_setparams(int id, const char *settings)
         }
     }
 
+    params.set("oppo-app", "1");
+
 #if !LOG_NDEBUG
     ALOGV("%s: fixed parameters:", __FUNCTION__);
     params.dump();
