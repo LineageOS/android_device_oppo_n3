@@ -46,7 +46,7 @@
         <device name="SND_DEVICE_IN_HANDSET_STEREO_DMIC" acdb_id="35" />
         <device name="SND_DEVICE_IN_SPEAKER_STEREO_DMIC" acdb_id="35" />
 
-        <device name="SND_DEVICE_IN_CAMCORDER_MIC" acdb_id="35" />
+        <device name="SND_DEVICE_IN_CAMCORDER_MIC" acdb_id="34" />
     </acdb_ids>
 
     <backend_names>
