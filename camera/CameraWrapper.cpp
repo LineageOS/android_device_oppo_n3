@@ -42,7 +42,7 @@ static camera_module_t *gVendorModule = 0;
 static android::Mutex gRotateLock;
 static android_thread_id_t gRotateThreadId = 0;
 static bool gRotateToFfc;
-static unsigned int gRotateCounter = 0;
+static long long gRotateTimeout = 0;
 
 static const char * MOTOR_ANGLE_FILE = "/sys/class/motor/cameramotor/mdangel";
 static const char * MOTOR_DIRECTION_FILE = "/sys/class/motor/cameramotor/mddir";
@@ -128,19 +128,20 @@ static void write_int(const char *file, int value)
     }
 }
 
+static long long get_current_time_millis()
+{
+    struct timespec t;
+    int r = clock_gettime(CLOCK_MONOTONIC, &t);
+    return t.tv_sec * 1000 + t.tv_nsec / 1000000;
+}
+
 static int rotate_camera_thread(void *)
 {
     while (true) {
-        unsigned int counterBeforeSleep;
-        {
-            android::Mutex::Autolock lock(gRotateLock);
-            counterBeforeSleep = gRotateCounter;
-        }
-
-        usleep(200 * 1000);
+        usleep(50 * 1000);
 
         android::Mutex::Autolock lock(gRotateLock);
-        if (gRotateCounter == counterBeforeSleep) {
+        if (get_current_time_millis() >= gRotateTimeout) {
             ALOGD("Rotate camera to %s", gRotateToFfc ? "FFC" : "BFC");
 
             write_int(MOTOR_ENABLE_FILE, 0);
@@ -148,8 +149,8 @@ static int rotate_camera_thread(void *)
             write_int(MOTOR_DIRECTION_FILE, gRotateToFfc ? 1 : 0);
             write_int(MOTOR_SPEED_FILE, 0);
             write_int(MOTOR_MODE_FILE, 6);
-            write_int(MOTOR_ENABLE_FILE, 1);
             write_int(MOTOR_BLOCK_DETECT_FILE, 0 /* same as speed */);
+            write_int(MOTOR_ENABLE_FILE, 1);
 
             gRotateThreadId = 0;
             break;
@@ -159,7 +160,7 @@ static int rotate_camera_thread(void *)
     return 0;
 }
 
-static void rotate_camera(bool to_ffc)
+static void rotate_camera(bool to_ffc, unsigned int timeout)
 {
     android::Mutex::Autolock lock(gRotateLock);
 
@@ -170,7 +171,7 @@ static void rotate_camera(bool to_ffc)
     }
 
     gRotateToFfc = to_ffc;
-    gRotateCounter++;
+    gRotateTimeout = get_current_time_millis() + timeout;
 }
 
 static const char *KEY_EXPOSURE_TIME = "exposure-time";
@@ -567,7 +568,7 @@ static int camera_device_close(hw_device_t *device)
 
     if (gUseFlags == 0) {
         gVendorDeviceHandle->common.close((hw_device_t*) gVendorDeviceHandle);
-        rotate_camera(false);
+        rotate_camera(false, 1000);
         free(fixed_set_params);
         gVendorDeviceHandle = NULL;
     }
@@ -658,7 +659,7 @@ static int camera_device_open(const hw_module_t *module, const char *name,
             goto fail;
         }
 
-        rotate_camera(cameraid == 1);
+        rotate_camera(cameraid == 1, 200);
 
         memset(camera_ops, 0, sizeof(*camera_ops));
 
