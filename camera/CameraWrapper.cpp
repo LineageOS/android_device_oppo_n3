@@ -42,6 +42,7 @@ static camera_module_t *gVendorModule = 0;
 static android::Mutex gRotateLock;
 static android_thread_id_t gRotateThreadId = 0;
 static bool gRotateToFfc;
+static int gRotateSpeed;
 static long long gRotateTimeout = 0;
 
 static const char * MOTOR_ANGLE_FILE = "/sys/class/motor/cameramotor/mdangel";
@@ -147,9 +148,9 @@ static int rotate_camera_thread(void *)
             write_int(MOTOR_ENABLE_FILE, 0);
             write_int(MOTOR_ANGLE_FILE, 215);
             write_int(MOTOR_DIRECTION_FILE, gRotateToFfc ? 1 : 0);
-            write_int(MOTOR_SPEED_FILE, 0);
+            write_int(MOTOR_SPEED_FILE, gRotateSpeed);
             write_int(MOTOR_MODE_FILE, 6);
-            write_int(MOTOR_BLOCK_DETECT_FILE, 0 /* same as speed */);
+            write_int(MOTOR_BLOCK_DETECT_FILE, gRotateSpeed);
             write_int(MOTOR_ENABLE_FILE, 1);
 
             gRotateThreadId = 0;
@@ -160,7 +161,7 @@ static int rotate_camera_thread(void *)
     return 0;
 }
 
-static void rotate_camera(bool to_ffc, unsigned int timeout)
+static void rotate_camera(bool to_ffc, int speed, unsigned int timeout)
 {
     android::Mutex::Autolock lock(gRotateLock);
 
@@ -171,6 +172,7 @@ static void rotate_camera(bool to_ffc, unsigned int timeout)
     }
 
     gRotateToFfc = to_ffc;
+    gRotateSpeed = speed;
     gRotateTimeout = get_current_time_millis() + timeout;
 }
 
@@ -522,6 +524,15 @@ static int camera_send_command(struct camera_device *device,
     if (!device)
         return -EINVAL;
 
+    if (cmd == 1000 /* start motor */) {
+        rotate_camera(arg1 != 0, arg2, 0);
+        return 0;
+    } else if (cmd == 1001 /* stop motor */) {
+        android::Mutex::Autolock lock(gRotateLock);
+        write_int(MOTOR_ENABLE_FILE, 0);
+        return 0;
+    }
+
     return VENDOR_CALL(device, send_command, cmd, arg1, arg2);
 }
 
@@ -568,7 +579,7 @@ static int camera_device_close(hw_device_t *device)
 
     if (gUseFlags == 0) {
         gVendorDeviceHandle->common.close((hw_device_t*) gVendorDeviceHandle);
-        rotate_camera(false, 1000);
+        rotate_camera(false, 0, 1000);
         free(fixed_set_params);
         gVendorDeviceHandle = NULL;
     }
@@ -659,7 +670,7 @@ static int camera_device_open(const hw_module_t *module, const char *name,
             goto fail;
         }
 
-        rotate_camera(cameraid == 1, 200);
+        rotate_camera(cameraid == 1, 0, 200);
 
         memset(camera_ops, 0, sizeof(*camera_ops));
 
