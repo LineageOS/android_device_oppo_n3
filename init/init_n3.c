@@ -46,10 +46,16 @@ static void import_kernel_nv(char *name, int for_emulator)
     // self-init!
 
     if (!strcmp(name,"oppo.rf_version")) {
-        if (!strcmp(value, "95")) {
+        if (!strcmp(value, "90")) {
+            property_set("ro.rf_version", "TDD_FDD_Ch");
+        } else if (!strcmp(value, "91")) {
+            property_set("ro.rf_version", "FDD_TDD_Ch");
+        } else if (!strcmp(value, "95")) {
             property_set("ro.rf_version", "W_G_L_Eu");
         } else if (!strcmp(value, "96")) {
             property_set("ro.rf_version", "W_G_L_Am");
+        } else if (!strcmp(value, "97")) {
+            property_set("ro.rf_version", "W_G_L_Tw");
         }
         property_set("ro.oppo.rf_version", value);
     } else if (!strcmp(name,"oppo.pcb_version")) {
