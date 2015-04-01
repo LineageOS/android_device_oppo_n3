@@ -757,8 +757,8 @@
 
     <path name="speaker">
         <path name="spk" />
-        <ctl name="RX3 Digital Volume" value="80" />
-        <ctl name="RX4 Digital Volume" value="80" />
+        <ctl name="RX3 Digital Volume" value="84" />
+        <ctl name="RX4 Digital Volume" value="84" />
     </path>
 
     <path name="speaker-protected">
