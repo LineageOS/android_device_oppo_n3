@@ -34,6 +34,18 @@
 #include "log.h"
 #include "util.h"
 
+static const struct {
+    const char *num_value;
+    const char *rf_name;
+    const char *model;
+} RF_VERSION_MAPPING[] = {
+    { "90", "TDD_FDD_Ch", "N5207" },
+    { "91", "FDD_TDD_Ch", "N5207" },
+    { "95", "W_G_L_Eu", "N5206" },
+    { "96", "W_G_L_Am", "N5206" },
+    { "97", "W_G_L_Tw", "N5206" }
+};
+
 static void import_kernel_nv(char *name, int for_emulator)
 {
     char *value = strchr(name, '=');
@@ -45,17 +57,19 @@ static void import_kernel_nv(char *name, int for_emulator)
 
     // self-init!
 
-    if (!strcmp(name,"oppo.rf_version")) {
-        if (!strcmp(value, "90")) {
-            property_set("ro.rf_version", "TDD_FDD_Ch");
-        } else if (!strcmp(value, "91")) {
-            property_set("ro.rf_version", "FDD_TDD_Ch");
-        } else if (!strcmp(value, "95")) {
-            property_set("ro.rf_version", "W_G_L_Eu");
-        } else if (!strcmp(value, "96")) {
-            property_set("ro.rf_version", "W_G_L_Am");
-        } else if (!strcmp(value, "97")) {
-            property_set("ro.rf_version", "W_G_L_Tw");
+    if (!strcmp(name, "oppo.rf_version")) {
+        size_t i, count = sizeof(RF_VERSION_MAPPING) / sizeof(RF_VERSION_MAPPING[0]);
+        for (i = 0; i < count; i++) {
+            if (!strcmp(RF_VERSION_MAPPING[i].num_value, value)) {
+                property_set("ro.rf_version", RF_VERSION_MAPPING[i].rf_name);
+                property_set("ro.product.model", RF_VERSION_MAPPING[i].model);
+                property_set("ro.build.product", RF_VERSION_MAPPING[i].model);
+		break;
+            }
+        }
+        if (i == count) {
+            // this should never happen, but be safe anyway...
+            property_set("ro.product.model", "N520x");
         }
         property_set("ro.oppo.rf_version", value);
     } else if (!strcmp(name,"oppo.pcb_version")) {

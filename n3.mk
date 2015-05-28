@@ -64,6 +64,10 @@ PRODUCT_COPY_FILES += \
     frameworks/base/nfc-extras/com.android.nfc_extras.xml:system/etc/permissions/com.android.nfc_extras.xml \
     frameworks/native/data/etc/android.hardware.nfc.xml:system/etc/permissions/android.hardware.nfc.xml
 
+# Model is set via init library
+PRODUCT_SYSTEM_PROPERTY_BLACKLIST := \
+    ro.product.model
+
 # Call the proprietary setup
 $(call inherit-product-if-exists, vendor/oppo/n3/n3-vendor.mk)
 
