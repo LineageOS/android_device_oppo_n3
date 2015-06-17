@@ -33,6 +33,24 @@
       "revId": "9f3f745d258b4823b582279d400b7111e6404bd2",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_73bb520f",
+        "filename": "n3.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 6753
+      },
+      "writtenOn": "2015-06-17T03:47:01Z",
+      "side": 1,
+      "message": "I\u0027ll have to look a little closer at what this blacklist does. ro.build.product is set to $TARGET_DEVICE (PRODUCT_DEVICE from cm.mk) early in the build system",
+      "parentUuid": "fa31d9ce_93cfe6b2",
+      "revId": "9f3f745d258b4823b582279d400b7111e6404bd2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
