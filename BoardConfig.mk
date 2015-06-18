@@ -1,3 +1,4 @@
+
 #
 # Copyright (C) 2014 The CyanogenMod Project
 #
@@ -56,6 +57,7 @@ AUDIO_FEATURE_ENABLED_SPKR_PROTECTION := true
 AUDIO_FEATURE_ENABLED_FLUENCE := true
 
 TARGET_INIT_VENDOR_LIB := libinit_n3
+TARGET_RECOVERY_DEVICE_MODULES := libinit_n3
 
 # SELinux
 BOARD_SEPOLICY_DIRS += device/oppo/n3/sepolicy
