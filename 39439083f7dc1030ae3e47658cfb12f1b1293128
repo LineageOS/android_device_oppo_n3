@@ -16,6 +16,24 @@
       "revId": "39439083f7dc1030ae3e47658cfb12f1b1293128",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da36d5c6_6f4b65b1",
+        "filename": "init/init_n3.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 6753
+      },
+      "writtenOn": "2015-06-19T02:18:02Z",
+      "side": 1,
+      "message": "Assume you meant also set ro.build.product?",
+      "parentUuid": "da36d5c6_0f54a952",
+      "revId": "39439083f7dc1030ae3e47658cfb12f1b1293128",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
