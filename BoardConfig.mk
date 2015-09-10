@@ -15,58 +15,156 @@
 # limitations under the License.
 #
 
-# Inherit from msm8974-common
--include device/oppo/msm8974-common/BoardConfigCommon.mk
+# inherit from Oppo common
+-include device/oppo/common/BoardConfigCommon.mk
+
+PLATFORM_PATH := device/oppo/n3
 
 # Include path
-TARGET_SPECIFIC_HEADER_PATH += device/oppo/n3/include
+TARGET_SPECIFIC_HEADER_PATH := $(PLATFORM_PATH)/include
+
+# Bootloader
+TARGET_BOOTLOADER_BOARD_NAME := MSM8974
+TARGET_NO_BOOTLOADER := true
+TARGET_NO_RADIOIMAGE := true
+
+# Platform
+TARGET_BOARD_PLATFORM := msm8974
+TARGET_BOARD_PLATFORM_GPU := qcom-adreno330
+
+# Architecture
+TARGET_ARCH := arm
+TARGET_ARCH_VARIANT := armv7-a-neon
+TARGET_CPU_ABI := armeabi-v7a
+TARGET_CPU_ABI2 := armeabi
+TARGET_CPU_VARIANT := krait
+
+# Assertions
+TARGET_BOARD_INFO_FILE ?= $(PLATFORM_PATH)/board-info.txt
+
+# Include path
+TARGET_SPECIFIC_HEADER_PATH += $(PLATFORM_PATH)/include
 
 # Kernel
-BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x3F ehci-hcd.park=3
+BOARD_CUSTOM_BOOTIMG_MK := $(PLATFORM_PATH)/mkbootimg.mk
+BOARD_KERNEL_BASE := 0x00000000
+BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x3F ehci-hcd.park=3 androidboot.bootdevice=msm_sdcc.1
+BOARD_KERNEL_PAGESIZE := 2048
+BOARD_KERNEL_SEPARATED_DT := true
+BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x02000000 --tags_offset 0x01e00000
+TARGET_KERNEL_ARCH := arm
 TARGET_KERNEL_CONFIG := cyanogenmod_n3_defconfig
 TARGET_KERNEL_SOURCE := kernel/oppo/n3
+
+# ANT+
+BOARD_ANT_WIRELESS_DEVICE := "vfs-prerelease"
 
 # Assert
 TARGET_OTA_ASSERT_DEVICE := n3,N5206,N5207
 
+# Audio
+BOARD_USES_ALSA_AUDIO := true
+AUDIO_FEATURE_ENABLED_FLUENCE := true
+AUDIO_FEATURE_ENABLED_HWDEP_CAL := true
+AUDIO_FEATURE_ENABLED_MULTI_VOICE_SESSIONS := true
+AUDIO_FEATURE_ENABLED_NEW_SAMPLE_RATE := true
+AUDIO_FEATURE_ENABLED_SPKR_PROTECTION := true
+AUDIO_FEATURE_LOW_LATENCY_PRIMARY := true
+
 # Bluetooth
-BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/oppo/n3/bluetooth
+BLUETOOTH_HCI_USE_MCT := true
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(PLATFORM_PATH)/bluetooth
+BOARD_HAVE_BLUETOOTH := true
+BOARD_HAVE_BLUETOOTH_QCOM := true
+QCOM_BT_USE_SMD_TTY := true
 
 # Camera
 USE_DEVICE_SPECIFIC_CAMERA := true
 COMMON_GLOBAL_CFLAGS += -DOPPO_CAMERA_HARDWARE
-BOARD_CAMERA_PLUGIN = device/oppo/n3/camera/plugin
+BOARD_CAMERA_PLUGIN = $(PLATFORM_PATH)/camera/plugin
+
+# Charger
+BOARD_CHARGER_DISABLE_INIT_BLANK := true
+
+# CM Hardware
+BOARD_USES_CYANOGEN_HARDWARE := true
+BOARD_HARDWARE_CLASS += $(PLATFORM_PATH)/cmhw
+
+# Encryption
+TARGET_HW_DISK_ENCRYPTION := true
 
 # Filesystem
+BOARD_FLASH_BLOCK_SIZE := 131072
 BOARD_BOOTIMAGE_PARTITION_SIZE     := 16777216
+BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_CACHEIMAGE_PARTITION_SIZE    := 536870912
+BOARD_PERSISTIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_PERSISTIMAGE_PARTITION_SIZE  := 33554432
 BOARD_RECOVERYIMAGE_PARTITION_SIZE := 25165824
 BOARD_SYSTEMIMAGE_PARTITION_SIZE   := 1577058304
+BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 114510381056 # 114510397440 - 16384 for crypto footer
+TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
+
+# Flags
+COMMON_GLOBAL_CFLAGS += -DNO_SECURE_DISCARD -DUSE_RIL_VERSION_10
+COMMON_GLOBAL_CPPFLAGS += -DNO_SECURE_DISCARD -DUSE_RIL_VERSION_10
+
+# Fonts
+EXTENDED_FONT_FOOTPRINT := true
+
+# Graphics
+HAVE_ADRENO_SOURCE := false
+MAX_EGL_CACHE_KEY_SIZE := 12*1024
+MAX_EGL_CACHE_SIZE := 2048*1024
+OVERRIDE_RS_DRIVER := libRSDriver_adreno.so
+SF_VSYNC_EVENT_PHASE_OFFSET_NS := 5000000
+TARGET_CONTINUOUS_SPLASH_ENABLED := true
+TARGET_USES_ION := true
+USE_OPENGL_RENDERER := true
+VSYNC_EVENT_PHASE_OFFSET_NS := 7500000
+
+# Init
+TARGET_INIT_VENDOR_LIB := libinit_n3
+TARGET_RECOVERY_DEVICE_MODULES := libinit_n3
+
+# Lights
+TARGET_PROVIDES_LIBLIGHT := true
 
 # NFC
 BOARD_NFC_CHIPSET := pn547
 
+# QCOM hardware
+BOARD_USES_QCOM_HARDWARE := true
+
+# Radio
+TARGET_RIL_VARIANT := caf
+
 # Recovery
-TARGET_RECOVERY_FSTAB := device/oppo/n3/rootdir/etc/fstab.qcom
-
-AUDIO_FEATURE_LOW_LATENCY_PRIMARY := true
-AUDIO_FEATURE_ENABLED_SPKR_PROTECTION := true
-AUDIO_FEATURE_ENABLED_FLUENCE := true
-
-TARGET_INIT_VENDOR_LIB := libinit_n3
-TARGET_RECOVERY_DEVICE_MODULES := libinit_n3
+TARGET_RECOVERY_FSTAB := $(PLATFORM_PATH)/rootdir/etc/fstab.qcom
 
 # SELinux
-BOARD_SEPOLICY_DIRS += device/oppo/n3/sepolicy
+include device/qcom/sepolicy/sepolicy.mk
 
-BOARD_SEPOLICY_UNION += \
-    file.te \
-    genfs_contexts \
-    mediaserver.te \
-    vold.te
+BOARD_SEPOLICY_DIRS += \
+    $(PLATFORM_PATH)/sepolicy
+
+# Wifi
+BOARD_HAS_QCOM_WLAN              := true
+BOARD_HAS_QCOM_WLAN_SDK          := true
+BOARD_WLAN_DEVICE                := qcwcn
+CONFIG_EAP_PROXY                 := qmi
+BOARD_WPA_SUPPLICANT_DRIVER      := NL80211
+BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_qcwcn
+BOARD_HOSTAPD_DRIVER             := NL80211
+BOARD_HOSTAPD_PRIVATE_LIB        := lib_driver_cmd_qcwcn
+TARGET_USES_WCNSS_CTRL           := true
+TARGET_USES_QCOM_WCNSS_QMI       := true
+TARGET_USES_WCNSS_MAC_ADDR_REV   := true
+WIFI_DRIVER_FW_PATH_STA          := "sta"
+WIFI_DRIVER_FW_PATH_AP           := "ap"
+WPA_SUPPLICANT_VERSION           := VER_0_8_X
 
 # Inherit from the proprietary version
 -include vendor/oppo/n3/BoardConfigVendor.mk
