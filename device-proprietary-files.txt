@@ -1,9 +1,9 @@
 # Camera
-lib/libjpeg_old.so
 lib/hw/camera.msm8974.so:lib/hw/camera.vendor.msm8974.so
 vendor/lib/libchromaflash.so
 vendor/lib/libllvd_smore.so
 vendor/lib/libmmcamera2_is.so
+vendor/lib/libmmcamera2_q3a_special.so
 vendor/lib/libmmcamera_chromaflash_lib.so
 vendor/lib/libmmcamera_llvd.so
 vendor/lib/libmmcamera_optizoom_lib.so
@@ -12,24 +12,19 @@ vendor/lib/libmmcamera_stillmore_lib.so
 vendor/lib/libmmcamera_sunny_16825_eeprom.so
 vendor/lib/libmmcamera_ubifocus_lib.so
 vendor/lib/liboptizoom.so
+vendor/lib/libseemore.so
 vendor/lib/libt2tmanager.so
 vendor/lib/libubifocus.so
-vendor/lib/libseemore.so
 
 # Camera Actuator
 vendor/lib/libactuator_rohm_bu64243gwz.so
 vendor/lib/libactuator_rohm_bu64243gwz_camcorder.so
 vendor/lib/libactuator_rohm_bu64243gwz_camera.so
-vendor/lib/libactuator_rohm_bu64243gwz_liteo.so
-vendor/lib/libactuator_rohm_bu64243gwz_liteo_camcorder.so
-vendor/lib/libactuator_rohm_bu64243gwz_liteo_camera.so
 
 # Camera Chromatix
 vendor/lib/libchromatix_ov16825_common.so
 vendor/lib/libchromatix_ov16825_common_1080p.so
 vendor/lib/libchromatix_ov16825_common_480p.so
-vendor/lib/libchromatix_ov16825_common_480p_liteon.so
-vendor/lib/libchromatix_ov16825_common_liteon.so
 vendor/lib/libchromatix_ov16825_default_video.so
 vendor/lib/libchromatix_ov16825_default_video_front.so
 vendor/lib/libchromatix_ov16825_hfr_120.so
@@ -40,16 +35,13 @@ vendor/lib/libchromatix_ov16825_liveshot.so
 vendor/lib/libchromatix_ov16825_liveshot_front.so
 vendor/lib/libchromatix_ov16825_preview.so
 vendor/lib/libchromatix_ov16825_preview_binning.so
-vendor/lib/libchromatix_ov16825_preview_binning_liteon.so
 vendor/lib/libchromatix_ov16825_preview_fb.so
 vendor/lib/libchromatix_ov16825_preview_front.so
-vendor/lib/libchromatix_ov16825_preview_liteon.so
 vendor/lib/libchromatix_ov16825_preview_night.so
 vendor/lib/libchromatix_ov16825_preview_sports.so
 vendor/lib/libchromatix_ov16825_snapshot.so
 vendor/lib/libchromatix_ov16825_snapshot_fb.so
 vendor/lib/libchromatix_ov16825_snapshot_front.so
-vendor/lib/libchromatix_ov16825_snapshot_liteon.so
 vendor/lib/libchromatix_ov16825_snapshot_night.so
 
 # NFC
