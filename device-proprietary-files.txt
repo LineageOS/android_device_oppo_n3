@@ -1,9 +1,9 @@
 # Camera
-lib/libjpeg_old.so
 lib/hw/camera.msm8974.so:lib/hw/camera.vendor.msm8974.so
 vendor/lib/libchromaflash.so
 vendor/lib/libllvd_smore.so
 vendor/lib/libmmcamera2_is.so
+vendor/lib/libmmcamera2_q3a_special.so
 vendor/lib/libmmcamera_chromaflash_lib.so
 vendor/lib/libmmcamera_llvd.so
 vendor/lib/libmmcamera_optizoom_lib.so
@@ -12,9 +12,9 @@ vendor/lib/libmmcamera_stillmore_lib.so
 vendor/lib/libmmcamera_sunny_16825_eeprom.so
 vendor/lib/libmmcamera_ubifocus_lib.so
 vendor/lib/liboptizoom.so
+vendor/lib/libseemore.so
 vendor/lib/libt2tmanager.so
 vendor/lib/libubifocus.so
-vendor/lib/libseemore.so
 
 # Camera Actuator
 vendor/lib/libactuator_rohm_bu64243gwz.so
