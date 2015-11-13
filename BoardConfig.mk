@@ -22,9 +22,9 @@
 TARGET_SPECIFIC_HEADER_PATH += device/oppo/n3/include
 
 # Kernel
-BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x3F ehci-hcd.park=3
-TARGET_KERNEL_CONFIG := cyanogenmod_n3_defconfig
-TARGET_KERNEL_SOURCE := kernel/oppo/n3
+BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x3F ehci-hcd.park=3 androidboot.bootdevice=msm_sdcc.1 androidboot.selinux=permissive
+TARGET_KERNEL_CONFIG := msm8974_n3_defconfig
+TARGET_KERNEL_SOURCE := kernel/oppo/msm8974
 
 # Assert
 TARGET_OTA_ASSERT_DEVICE := n3,N5206,N5207
