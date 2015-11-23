@@ -63,14 +63,12 @@ static void import_kernel_nv(char *name, int for_emulator)
             if (!strcmp(RF_VERSION_MAPPING[i].num_value, value)) {
                 property_set("ro.rf_version", RF_VERSION_MAPPING[i].rf_name);
                 property_set("ro.product.model", RF_VERSION_MAPPING[i].model);
-                property_set("ro.build.product", RF_VERSION_MAPPING[i].model);
                 break;
             }
         }
         if (i == count) {
             // this should never happen, but be safe anyway...
             property_set("ro.product.model", "N520x");
-            property_set("ro.build.product", "N520x");
         }
         property_set("ro.oppo.rf_version", value);
     } else if (!strcmp(name,"oppo.pcb_version")) {
