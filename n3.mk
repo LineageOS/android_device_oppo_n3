@@ -63,8 +63,7 @@ PRODUCT_COPY_FILES += \
 
 # Model is set via init library
 PRODUCT_SYSTEM_PROPERTY_BLACKLIST := \
-    ro.product.model \
-    ro.build.product
+    ro.product.model
 
 # Call the proprietary setup
 $(call inherit-product-if-exists, vendor/oppo/n3/n3-vendor.mk)
