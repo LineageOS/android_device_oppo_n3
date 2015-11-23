@@ -36,14 +36,13 @@
 
 static const struct {
     const char *num_value;
-    const char *rf_name;
     const char *model;
 } RF_VERSION_MAPPING[] = {
-    { "90", "TDD_FDD_Ch", "N5207" },
-    { "91", "FDD_TDD_Ch", "N5207" },
-    { "95", "W_G_L_Eu", "N5206" },
-    { "96", "W_G_L_Am", "N5206" },
-    { "97", "W_G_L_Tw", "N5206" }
+    { "90", "N5207" },
+    { "91", "N5207" },
+    { "95", "N5206" },
+    { "96", "N5206" },
+    { "97", "N5206" }
 };
 
 static void import_kernel_nv(char *name, int for_emulator)
@@ -55,13 +54,10 @@ static void import_kernel_nv(char *name, int for_emulator)
     *value++ = 0;
     if (name_len == 0) return;
 
-    // self-init!
-
     if (!strcmp(name, "oppo.rf_version")) {
         size_t i, count = sizeof(RF_VERSION_MAPPING) / sizeof(RF_VERSION_MAPPING[0]);
         for (i = 0; i < count; i++) {
             if (!strcmp(RF_VERSION_MAPPING[i].num_value, value)) {
-                property_set("ro.rf_version", RF_VERSION_MAPPING[i].rf_name);
                 property_set("ro.product.model", RF_VERSION_MAPPING[i].model);
                 break;
             }
@@ -80,4 +76,3 @@ void vendor_load_properties()
 {
     import_kernel_cmdline(0, import_kernel_nv);
 }
-
