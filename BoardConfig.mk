@@ -56,6 +56,9 @@ TARGET_RECOVERY_DEVICE_MODULES := libinit_n3
 # NFC
 BOARD_NFC_CHIPSET := pn547
 
+# Properties
+TARGET_SYSTEM_PROP += device/oppo/n3/system.prop
+
 # Recovery
 TARGET_RECOVERY_FSTAB := device/oppo/n3/rootdir/etc/fstab.qcom
 
