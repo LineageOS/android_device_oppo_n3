@@ -4,7 +4,7 @@
     "target_path": "device/oppo/msm8974-common"
   },
   {
-    "repository": "android_kernel_oppo_msm8974",
-    "target_path": "kernel/oppo/msm8974"
+    "repository": "android_kernel_oppo_n3",
+    "target_path": "kernel/oppo/n3"
   }
 ]
