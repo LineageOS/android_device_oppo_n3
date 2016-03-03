@@ -36,6 +36,8 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+#define UNUSED __attribute__((unused))
+
 static android::Mutex gCameraWrapperLock;
 static camera_module_t *gVendorModule = 0;
 
@@ -181,11 +183,10 @@ static void rotate_camera(bool to_ffc, int speed, unsigned int timeout)
 static const char *KEY_EXPOSURE_TIME = "exposure-time";
 static const char *KEY_EXPOSURE_TIME_VALUES = "exposure-time-values";
 
-static char *camera_fixup_getparams(int id, const char *settings)
+static char *camera_fixup_getparams(UNUSED int id, const char *settings)
 {
     bool videoMode = false;
     const char *exposureTimeValues = "0,1,500000,1000000,2000000,4000000,8000000,16000000,32000000,64000000";
-    const char *supportedSceneModes = "auto,asd,landscape,snow,beach,sunset,night,portrait,backlight,sports,steadyphoto,flowers,candlelight,fireworks,party,night-portrait,theatre,action,AR";
 
     android::CameraParameters params;
     params.unflatten(android::String8(settings));
@@ -215,22 +216,8 @@ static char *camera_fixup_getparams(int id, const char *settings)
     params.remove("still-more-values");
 
     if (!videoMode) {
-        /* Back camera */
-        if (id == 0) {
-            /* Set supported exposure time values */
-            params.set(KEY_EXPOSURE_TIME_VALUES, exposureTimeValues);
-        }
-
-        /* Front camera */
-        if (id == 1) {
-            /* Remove HDR scene mode */
-            params.set(android::CameraParameters::KEY_SUPPORTED_SCENE_MODES,
-                    supportedSceneModes);
-
-            /* Remove ISO */
-            params.remove("iso");
-            params.remove("iso-values");
-        }
+        /* Set supported exposure time values */
+        params.set(KEY_EXPOSURE_TIME_VALUES, exposureTimeValues);
     }
 
 #if !LOG_NDEBUG
@@ -244,7 +231,7 @@ static char *camera_fixup_getparams(int id, const char *settings)
     return ret;
 }
 
-static char *camera_fixup_setparams(int id, const char *settings)
+static char *camera_fixup_setparams(UNUSED int id, const char *settings)
 {
     bool videoMode = false;
     bool slowShutterMode = false;
@@ -268,11 +255,9 @@ static char *camera_fixup_setparams(int id, const char *settings)
 
     /* Disable flash if slow shutter is enabled */
     if (!videoMode) {
-        if (id == 0) {
-            if (slowShutterMode) {
-                params.set(android::CameraParameters::KEY_FLASH_MODE,
-                        android::CameraParameters::FLASH_MODE_OFF);
-            }
+        if (slowShutterMode) {
+            params.set(android::CameraParameters::KEY_FLASH_MODE,
+                    android::CameraParameters::FLASH_MODE_OFF);
         }
     }
 
