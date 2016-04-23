@@ -346,7 +346,7 @@
     </path>
 
     <path name="compress-offload-playback i2s">
-        <ctl name="SEC_MI2S_RX Audio Mixer MultiMedia5" value="1" />
+        <ctl name="SEC_MI2S_RX Audio Mixer MultiMedia4" value="1" />
     </path>
 
     <path name="compress-offload-playback usb-headphones">
