@@ -294,6 +294,10 @@
         <path name="low-latency-playback" />
     </path>
 
+    <path name="audio-ull-playback i2s">
+        <ctl name="SEC_MI2S_RX Audio Mixer MultiMedia3" value="1" />
+    </path>
+
     <path name="audio-ull-playback">
         <ctl name="SLIMBUS_0_RX Audio Mixer MultiMedia3" value="1" />
     </path>
