@@ -54,11 +54,6 @@ on boot
     chmod 0660 /sys/class/motor/cameramotor/pwm_enable
     chmod 0660 /proc/cam_block
 
-on post-fs-data
-    # Torch
-    chown system camera /sys/devices/qcom,camera-led-flash.81/test
-    chmod 0660 /sys/devices/qcom,camera-led-flash.81/test
-
 on property:persist.radio.multisim.config=dsds
     start ril-daemon2
 
