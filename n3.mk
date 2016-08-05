@@ -45,15 +45,15 @@ $(call inherit-product-if-exists, frameworks/native/build/phone-xxhdpi-2048-hwui
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 
-# NFC packages
+# NFC
 PRODUCT_PACKAGES += \
     NfcNci \
     Tag \
     nfc_nci.pn54x.default \
     com.android.nfc_extras
 
-# NFC config
 PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/libnfc-nxp.conf:system/etc/libnfc-nxp.conf \
     $(LOCAL_PATH)/configs/libnfc-brcm.conf:system/etc/libnfc-brcm.conf
 
 # Permissions
