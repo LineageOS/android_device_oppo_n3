@@ -47,20 +47,16 @@ static const struct {
     { "97", "N5206" }
 };
 
-static void import_kernel_nv(char *name, int for_emulator)
+static void import_kernel_nv(const std::string& key,
+        const std::string& value, bool for_emulator __attribute__((unused)))
 {
-    char *value = strchr(name, '=');
-    int name_len = strlen(name);
+    if (key.empty()) return;
 
-    if (value == 0) return;
-    *value++ = 0;
-    if (name_len == 0) return;
-
-    if (!strcmp(name, "oppo.rf_version")) {
+    if (key == "oppo.rf_version") {
         size_t i, count = sizeof(RF_VERSION_MAPPING) / sizeof(RF_VERSION_MAPPING[0]);
         for (i = 0; i < count; i++) {
             if (!strcmp(RF_VERSION_MAPPING[i].num_value, value)) {
-                property_set("ro.product.model", RF_VERSION_MAPPING[i].model);
+                property_set("ro.product.model", RF_VERSION_MAPPING[i].model.c_str());
                 break;
             }
         }
@@ -68,9 +64,9 @@ static void import_kernel_nv(char *name, int for_emulator)
             // this should never happen, but be safe anyway...
             property_set("ro.product.model", "N520x");
         }
-        property_set("ro.oppo.rf_version", value);
-    } else if (!strcmp(name,"oppo.pcb_version")) {
-        property_set("ro.oppo.pcb_version", value);
+        property_set("ro.oppo.rf_version", value.c_str());
+    } else if (key == "oppo.pcb_version") {
+        property_set("ro.oppo.pcb_version", value.c_str());
     }
 }
 
