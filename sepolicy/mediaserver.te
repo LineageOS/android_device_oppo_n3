@@ -1,1 +1,2 @@
 allow mediaserver proc_cam_motor:file { open write };
+allow mediaserver sysfs:file rw_file_perms;
