@@ -53,14 +53,10 @@ on boot
     chmod 0660 /sys/class/motor/cameramotor/pwm_enable
     chmod 0660 /proc/cam_block
 
-on property:persist.radio.multisim.config=dsds
-    start ril-daemon2
-
 service ril-daemon2 /system/bin/rild -c 2
     class main
     socket rild2 stream 660 root radio
+    socket sap_uim_socket2 stream 660 bluetooth bluetooth
     socket rild-debug2 stream 660 radio system
     user root
-    disabled
-    group radio cache inet misc audio sdcard_r sdcard_rw diag qcom_diag log
-
+    group radio cache inet misc audio log readproc wakelock qcom_diag
