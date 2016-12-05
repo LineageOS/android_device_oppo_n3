@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f681702_d6bd5969",
+        "filename": "sepolicy/audioserver.te",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2016-12-05T12:23:06Z",
+      "side": 1,
+      "message": "These are probably no longer needed after https://github.com/CyanogenMod/android_device_qcom_sepolicy/commit/cab08e59685192f244bc3c523d0a080e98b5141e\n\nCan you check?",
+      "revId": "08640279337b313614ce41efdfdfc09214d7c500",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
