@@ -22,7 +22,7 @@
 TARGET_SPECIFIC_HEADER_PATH += device/oppo/n3/include
 
 # Kernel
-BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x3F ehci-hcd.park=3
+BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x3F ehci-hcd.park=3 androidboot.selinux=permissive
 TARGET_KERNEL_CONFIG := lineageos_n3_defconfig
 TARGET_KERNEL_SOURCE := kernel/oppo/msm8974
 
@@ -58,7 +58,24 @@ BOARD_NFC_CHIPSET := pn547
 TARGET_SYSTEM_PROP += device/oppo/n3/system.prop
 
 # Recovery
+#RECOVERY_VARIANT := twrp
+ifeq ($(RECOVERY_VARIANT),twrp)
+BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
+TARGET_RECOVERY_FSTAB := device/oppo/n3/recovery/twrp.fstab
+TARGET_RECOVERY_PIXEL_FORMAT := "RGB_565"
+BOARD_HAS_NO_REAL_SDCARD := true
+TW_TARGET_USES_QCOM_BSP := true
+TW_THEME := portrait_hdpi
+RECOVERY_SDCARD_ON_DATA := true
+RECOVERY_GRAPHICS_USE_LINELENGTH := true
+TW_DEFAULT_BRIGHTNESS := "160"
+TW_INCLUDE_CRYPTO := true
+TW_INCLUDE_NTFS_3G := true
+TW_EXCLUDE_SUPERSU := true
+TW_NO_USB_STORAGE := true
+else
 TARGET_RECOVERY_FSTAB := device/oppo/n3/rootdir/etc/fstab.qcom
+endif
 
 AUDIO_FEATURE_LOW_LATENCY_PRIMARY := true
 AUDIO_FEATURE_ENABLED_SPKR_PROTECTION := true
