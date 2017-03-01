@@ -37,7 +37,6 @@ BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/oppo/n3/bluetooth
 
 # Camera
 USE_DEVICE_SPECIFIC_CAMERA := true
-BOARD_CAMERA_PLUGIN = device/oppo/n3/camera/plugin
 
 # Filesystem
 BOARD_BOOTIMAGE_PARTITION_SIZE     := 16777216
