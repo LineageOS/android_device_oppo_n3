@@ -1,3 +1,3 @@
 Copyright 2014 - The CyanogenMod Project
 
-Device configuration for Oppo N3
+Device configuration for OPPO N3
