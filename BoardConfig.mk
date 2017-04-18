@@ -68,4 +68,4 @@ AUDIO_FEATURE_ENABLED_FLUENCE := true
 BOARD_SEPOLICY_DIRS += device/oppo/n3/sepolicy
 
 # Inherit from the proprietary version
--include vendor/oppo/n3/BoardConfigVendor.mk
+include vendor/oppo/n3/BoardConfigVendor.mk
