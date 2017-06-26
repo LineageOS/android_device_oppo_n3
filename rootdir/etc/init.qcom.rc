@@ -27,18 +27,11 @@ on init
 
 on boot
     # For n3 notification LED
-    chown system system /sys/class/leds/led:rgb_red/brightness
-    chown system system /sys/class/leds/led:rgb_red/ramp_step_ms
-    chown system system /sys/class/leds/led:rgb_red/duty_pcts
-    chown system system /sys/class/leds/led:rgb_red/blink
-    chown system system /sys/class/leds/led:rgb_green/brightness
-    chown system system /sys/class/leds/led:rgb_green/ramp_step_ms
-    chown system system /sys/class/leds/led:rgb_green/duty_pcts
-    chown system system /sys/class/leds/led:rgb_green/blink
-    chown system system /sys/class/leds/led:rgb_blue/brightness
-    chown system system /sys/class/leds/led:rgb_blue/ramp_step_ms
-    chown system system /sys/class/leds/led:rgb_blue/duty_pcts
-    chown system system /sys/class/leds/led:rgb_blue/blink
+    chown system system /sys/class/leds/red/brightness
+    chown system system /sys/class/leds/red/ramp_step_ms
+    chown system system /sys/class/leds/red/duty_pcts
+    chown system system /sys/class/leds/red/blink
+
     # camera motor
     chown system camera /sys/class/motor/cameramotor/mdangel
     chown system camera /sys/class/motor/cameramotor/mddir
@@ -63,4 +56,3 @@ service ril-daemon2 /system/bin/rild -c 2
     user root
     disabled
     group radio cache inet misc audio sdcard_r sdcard_rw diag qcom_diag log
-
