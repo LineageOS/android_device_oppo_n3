@@ -22,6 +22,30 @@
       "revId": "fed0ed25a2f96e3019f7a5a1a86b02c3ea2a039a",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b33ea57b_13455053",
+        "filename": "rootdir/etc/init.qcom.rc",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2017-08-07T18:30:00Z",
+      "side": 1,
+      "message": "Probably because qcom never bothered to update the msim ril-daemon services. I just followed what\u0027s in rild.rc increasing socket number. https://github.com/LineageOS/android_hardware_ril/blob/5758b0ecdcf31d148816095b7409a16a6bd884ef/libril/RilSapSocket.cpp#L120",
+      "parentUuid": "f464757d_3ff70d36",
+      "range": {
+        "startLine": 59,
+        "startChar": 4,
+        "endLine": 59,
+        "endChar": 57
+      },
+      "revId": "fed0ed25a2f96e3019f7a5a1a86b02c3ea2a039a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
