@@ -44,10 +44,8 @@ on boot
     chmod 0660 /sys/class/motor/cameramotor/pwm_enable
     chmod 0660 /proc/cam_block
 
-service ril-daemon2 /system/bin/rild -c 2
+service ril-daemon2 /vendor/bin/hw/rild -c 2
     class main
-    socket rild2 stream 660 root radio
-    socket sap_uim_socket2 stream 660 bluetooth bluetooth
-    socket rild-debug2 stream 660 radio system
-    user root
+    user radio
     group radio cache inet misc audio log readproc wakelock qcom_diag
+    capabilities BLOCK_SUSPEND NET_ADMIN NET_RAW
