@@ -57,7 +57,7 @@ BOARD_NFC_HAL_SUFFIX := msm8974
 TARGET_SYSTEM_PROP += device/oppo/n3/system.prop
 
 # Recovery
-TARGET_RECOVERY_FSTAB := device/oppo/n3/rootdir/etc/fstab.qcom
+TARGET_RECOVERY_FSTAB := device/oppo/n3/rootdir/etc/fstab.recovery
 
 # SELinux
 BOARD_SEPOLICY_DIRS += device/oppo/n3/sepolicy
