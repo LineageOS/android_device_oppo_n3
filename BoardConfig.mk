@@ -64,5 +64,10 @@ TARGET_RECOVERY_FSTAB := device/oppo/n3/rootdir/etc/fstab.qcom
 # SELinux
 BOARD_SEPOLICY_DIRS += device/oppo/n3/sepolicy
 
+# TWRP
+ifeq ($(WITH_TWRP),true)
+TARGET_RECOVERY_DEVICE_DIRS += device/oppo/n3/twrp
+endif
+
 # Inherit from the proprietary version
 include vendor/oppo/n3/BoardConfigVendor.mk
