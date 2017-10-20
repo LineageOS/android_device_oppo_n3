@@ -35,7 +35,8 @@ TARGET_SCREEN_WIDTH := 1080
 
 # Camera
 PRODUCT_PACKAGES += \
-    camera.msm8974
+    camera.msm8974 \
+    libshim_camera_parameters
 
 # Dalvik/HWUI
 $(call inherit-product-if-exists, frameworks/native/build/phone-xxhdpi-2048-dalvik-heap.mk)
@@ -47,6 +48,7 @@ PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 
 # NFC
 PRODUCT_PACKAGES += \
+    android.hardware.nfc@1.0-impl \
     NfcNci \
     Tag \
     nfc_nci.pn54x.default \
