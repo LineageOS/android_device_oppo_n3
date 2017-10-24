@@ -51,6 +51,7 @@ TARGET_LIBINIT_MSM8974_DEFINES_FILE := device/oppo/n3/init/init_n3.cpp
 
 # NFC
 BOARD_NFC_CHIPSET := pn547
+BOARD_NFC_HAL_SUFFIX := msm8974
 
 # Properties
 TARGET_SYSTEM_PROP += device/oppo/n3/system.prop
