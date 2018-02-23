@@ -62,6 +62,11 @@ TARGET_RECOVERY_FSTAB := device/oppo/n3/rootdir/etc/fstab.recovery
 # SELinux
 BOARD_SEPOLICY_DIRS += device/oppo/n3/sepolicy
 
+# Shims
+TARGET_LD_SHIM_LIBS := \
+    /system/vendor/lib/hw/camera.vendor.msm8974.so|libshim_camera.so \
+    /system/lib/libcamera_client.so|libshim_camera_parameters.so
+
 # TWRP
 ifeq ($(WITH_TWRP),true)
 TARGET_RECOVERY_DEVICE_DIRS += device/oppo/n3/twrp
