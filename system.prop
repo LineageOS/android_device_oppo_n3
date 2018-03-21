@@ -24,3 +24,7 @@ ro.qualcomm.cabl=0
 
 # Display
 ro.sf.lcd_density=480
+
+# Camera
+media.stagefright.legacyencoder=true
+media.stagefright.less-secure=true
