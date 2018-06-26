@@ -41,9 +41,8 @@ PRODUCT_PACKAGES += \
     libshim_camera \
     libshim_camera_parameters
 
-# Dalvik/HWUI
+# Dalvik
 $(call inherit-product-if-exists, frameworks/native/build/phone-xxhdpi-2048-dalvik-heap.mk)
-$(call inherit-product-if-exists, frameworks/native/build/phone-xxhdpi-2048-hwui-memory.mk)
 
 # Display
 PRODUCT_AAPT_CONFIG := normal
